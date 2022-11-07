@@ -1,44 +1,33 @@
 import { Account } from '@ACCOUNT/domain';
+import { MongooseBaseRepository } from '@COMMON/base/base-repository.mongoose';
 import { IEntityMapper } from '@COMMON/interface/mapper.interface';
 import { Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { IAccountRepository } from '../port/account.repository.port';
-import { AccountEntity } from './account.entity';
+import { AccountEntity, AccountSchemaName } from './account.entity';
 import { AccountEntityMapper } from './account.mapper';
 
 @Injectable()
-export class AccountRepository implements IAccountRepository {
+export class AccountRepository
+  extends MongooseBaseRepository<Account.Id, Account.Property, AccountEntity>
+  implements IAccountRepository
+{
   constructor(
     @Inject(AccountEntityMapper)
-    private readonly mapper: IEntityMapper<Account.Property, AccountEntity>,
-    @InjectRepository(AccountEntity)
-    private readonly repository: Repository<AccountEntity>,
-  ) {}
-
-  async save(agg: Account.Property): Promise<Account.Property> {
-    return this.mapper.toAggregate(
-      await this.repository.save(this.mapper.toRootEntity(agg)),
-    );
-  }
-
-  async remove({ id }: Account.Property): Promise<void> {
-    await this.repository.delete(id);
-    return;
+    mapper: IEntityMapper<Account.Property, AccountEntity>,
+    @InjectModel(AccountSchemaName)
+    model: Model<IAccountRepository.Document>,
+  ) {
+    super(mapper, model);
   }
 
   async findOne(
     dto: IAccountRepository.FindOne,
   ): Promise<Account.Property | null> {
-    const where: FindOptionsWhere<AccountEntity> = {};
-    if ('id' in dto) {
-      where.id = dto.id;
-    } else if ('email' in dto) {
-      where.email = dto.email;
-    } else {
-      where.username = dto.username;
-    }
-    const entity = await this.repository.findOne({ where });
-    return entity == null ? null : this.mapper.toAggregate(entity);
+    const document = await this.getModel().findOne({
+      ...('id' in dto ? { id: dto.id } : { email: dto.email }),
+    });
+    return document == null ? null : this.getMapper().toAggregate(document);
   }
 }

@@ -1,31 +1,38 @@
-import { Column, Entity } from 'typeorm';
-import { TypeOrmBaseEntity } from '@COMMON/base/base-entity.typeorm';
-import { IAccountRepository } from '../port/account.repository.port';
 import { Account } from '@ACCOUNT/domain';
+import { BaseEntity } from '@COMMON/base/base-entity.mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export const AccountErrorMessage = {
-  username_unique: '이미 사용중인 사용자명입니다.',
   email_unique: '이미 사용중인 이메일입니다.',
   password_regex: '비밀번호는 숫자와 문자로 이루어진 6~12자리 문자열입니다.',
 };
 
-@Entity({ name: 'accounts' })
+@Schema({
+  id: true,
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+  },
+})
 export class AccountEntity
-  extends TypeOrmBaseEntity
-  implements IAccountRepository.Entity
+  extends BaseEntity<Account.Id>
+  implements Account.Property
 {
-  @Column({ unique: true })
+  @Prop({ unique: true, required: true })
   email!: string;
 
-  @Column({ default: false })
+  @Prop({ default: false })
   verified!: boolean;
 
-  @Column({ unique: true })
+  @Prop({ required: true })
   username!: string;
 
-  @Column()
+  @Prop({ required: true })
   password!: string;
 
-  @Column({ default: 'Normal' })
+  @Prop({ default: 'Normal' })
   role!: Account.Permission;
 }
+
+export const AccountSchemaName = 'accounts';
+export const AccountSchema = SchemaFactory.createForClass(AccountEntity);

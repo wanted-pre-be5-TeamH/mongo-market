@@ -2,8 +2,7 @@ import { Account } from '@ACCOUNT/domain';
 import { CookieOptions } from 'express';
 
 export namespace IAccountUsecase {
-  export type SignIn = Account.Password &
-    (Pick<Account.Property, 'email'> | Pick<Account.Property, 'username'>);
+  export type SignIn = Account.Password & Pick<Account.Property, 'email'>;
 
   export type SignInResponse = readonly [string, string, CookieOptions];
 

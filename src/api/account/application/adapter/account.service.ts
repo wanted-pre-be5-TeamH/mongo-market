@@ -16,7 +16,9 @@ export class AccountService implements IAccountService {
   ) {}
 
   async findOne(where: IAccountService.FindOne): Promise<Account.Property> {
-    const account = await this.accountRepository.findOne(where);
+    const account = await this.accountRepository.findOne({
+      ...('id' in where ? { id: where.id } : { email: where.email }),
+    });
     return account == null
       ? throwHttpException('404', ExceptionMessage.NotFound)
       : account;
@@ -33,10 +35,10 @@ export class AccountService implements IAccountService {
   }
 
   async signInLocal({
+    email,
     password,
-    ...where
   }: IAccountService.SignInLocal): Promise<Account.Property> {
-    const account = await this.findOne(where);
+    const account = await this.findOne({ email });
     await this.checkPassword({ password, hashed: account.password });
     return account;
   }
@@ -48,14 +50,11 @@ export class AccountService implements IAccountService {
     return;
   }
 
-  async checkDuplicate(dto: IAccountService.CheckDupliacte): Promise<void> {
-    if ((await this.accountRepository.findOne(dto)) != null) {
-      throwHttpException(
-        '400',
-        'username' in dto
-          ? AccountErrorMessage.username_unique
-          : AccountErrorMessage.email_unique,
-      );
+  async checkDuplicate({
+    email,
+  }: IAccountService.CheckDupliacte): Promise<void> {
+    if ((await this.accountRepository.findOne({ email })) != null) {
+      throwHttpException('400', AccountErrorMessage.email_unique);
     }
     return;
   }

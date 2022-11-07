@@ -1,17 +1,20 @@
 import { Test } from '@nestjs/testing';
 import { AccountEntityMapper } from '@ACCOUNT/infrastructure/adapter/account.mapper';
 import { AccountRepository } from '@ACCOUNT/infrastructure/adapter/account.repository';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { AccountEntity } from '@ACCOUNT/infrastructure/adapter/account.entity';
-import { mockRepository } from './repository.mock';
+import {
+  AccountEntity,
+  AccountSchemaName,
+} from '@ACCOUNT/infrastructure/adapter/account.entity';
 import { Account } from '@ACCOUNT/domain';
 import { IAccountRepository } from '@ACCOUNT/infrastructure/port/account.repository.port';
 import { IEntityMapper } from '@COMMON/interface/mapper.interface';
+import { getModelToken } from '@nestjs/mongoose';
+import { mockModel } from '@COMMON/provider/model.mock';
 
 describe('Account Repository Unit Test', () => {
   let repository: IAccountRepository;
   let mapper: IEntityMapper<Account.Property, AccountEntity>;
-  const mockRepo = mockRepository();
+  const model = mockModel<Account.Id, AccountEntity>();
   const now1 = new Date();
   const now2 = new Date();
 
@@ -20,8 +23,8 @@ describe('Account Repository Unit Test', () => {
       providers: [
         AccountEntityMapper,
         {
-          provide: getRepositoryToken(AccountEntity),
-          useValue: mockRepo,
+          provide: getModelToken(AccountSchemaName),
+          useValue: model,
         },
         AccountRepository,
       ],
@@ -40,7 +43,7 @@ describe('Account Repository Unit Test', () => {
 
   describe('findOne', () => {
     const entity = new AccountEntity();
-    entity.id = 12;
+    entity.id = 'sfecescsc';
     entity.username = 'testuser';
     entity.email = 'test@test.com';
     entity.role = 'Normal';
@@ -48,12 +51,12 @@ describe('Account Repository Unit Test', () => {
     entity.verified = true;
     entity.created_at = now1;
     entity.updated_at = now2;
-    it('findOne - 대상이 존재할 때', async () => {
-      mockRepo.findOne.mockResolvedValue(entity);
-      const received = await repository.findOne({ id: 12 });
+    it('대상이 존재할 때', async () => {
+      model.findOne.mockResolvedValue(entity);
+      const received = await repository.findOne({ id: 'sfecescsc' });
 
       expect(received).toEqual<Account.Property>({
-        id: 12,
+        id: 'sfecescsc',
         username: 'testuser',
         email: 'test@test.com',
         role: 'Normal',
@@ -62,65 +65,99 @@ describe('Account Repository Unit Test', () => {
         created_at: now1,
         updated_at: now2,
       });
-      expect(mockRepo.findOne).toBeCalledTimes(1);
-      expect(mockRepo.findOne).toBeCalledWith({ where: { id: 12 } });
+      expect(model.findOne).toBeCalledTimes(1);
+      expect(model.findOne).toBeCalledWith({ id: 'sfecescsc' });
       return;
     });
-    it('findOne - 대상이 존재하지 않을 때', async () => {
-      mockRepo.findOne.mockResolvedValue(null);
+    it('대상이 존재하지 않을 때', async () => {
+      model.findOne.mockResolvedValue(null);
       const spy = jest.spyOn(mapper, 'toAggregate');
 
-      const received = await repository.findOne({ id: 12 });
+      const received = await repository.findOne({ id: 'sfecescsc' });
 
       expect(received).toBe(null);
-      expect(mockRepo.findOne).toBeCalledTimes(1);
+      expect(model.findOne).toBeCalledTimes(1);
       expect(spy).toBeCalledTimes(0);
       return;
     });
   });
 
-  it('save', async () => {
-    const spyRE = jest.spyOn(mapper, 'toRootEntity');
-    const spyER = jest.spyOn(mapper, 'toAggregate');
+  describe('save', () => {
+    it('대상이 존재하지 않을 때', async () => {
+      const spyRE = jest.spyOn(mapper, 'toRootEntity');
+      const spyER = jest.spyOn(mapper, 'toAggregate');
+      const spyCreate = jest.spyOn(model, 'create');
 
-    mockRepo.save.mockImplementationOnce((value) => value);
-    const { created_at, updated_at, ...received } = await repository.save({
-      id: 0,
-      username: 'testuser',
-      email: 'test@test.com',
-      role: 'Normal',
-      password: '12345rtg',
-      verified: true,
-      created_at: now1,
-      updated_at: now2,
+      model.findOneAndUpdate.mockResolvedValue(null);
+      model.create.mockImplementationOnce((entity) => ({
+        id: 'test',
+        ...entity,
+      }));
+      const { created_at, updated_at, ...received } = await repository.save({
+        id: 'afdsefesf',
+        username: 'testuser',
+        email: 'test@test.com',
+        role: 'Normal',
+        password: '12345rtg',
+        verified: true,
+        created_at: now1,
+        updated_at: now2,
+      });
+      expect(received).toEqual({
+        id: 'test',
+        username: 'testuser',
+        email: 'test@test.com',
+        role: 'Normal',
+        password: '12345rtg',
+        verified: true,
+      });
+      expect(created_at).not.toEqual(now1);
+      expect(updated_at).not.toEqual(now2);
+      expect(spyER).toBeCalledTimes(1);
+      expect(spyRE).toBeCalledTimes(1);
+      expect(spyCreate).toBeCalledTimes(1);
+      return;
     });
-    expect(received).toEqual({
-      id: 0,
-      username: 'testuser',
-      email: 'test@test.com',
-      role: 'Normal',
-      password: '12345rtg',
-      verified: true,
+
+    it('대상이 존재할 때', async () => {
+      const spyRE = jest.spyOn(mapper, 'toRootEntity');
+      const spyER = jest.spyOn(mapper, 'toAggregate');
+      const spyCreate = jest.spyOn(model, 'create');
+
+      model.findOneAndUpdate.mockImplementationOnce((value, entity) => ({
+        id: value.id,
+        ...entity,
+      }));
+      const { created_at, updated_at, ...received } = await repository.save({
+        id: 'afdsefesf',
+        username: 'testuser',
+        email: 'test@test.com',
+        role: 'Normal',
+        password: '12345rtg',
+        verified: true,
+        created_at: now1,
+        updated_at: now2,
+      });
+      expect(received).toEqual({
+        id: 'afdsefesf',
+        username: 'testuser',
+        email: 'test@test.com',
+        role: 'Normal',
+        password: '12345rtg',
+        verified: true,
+      });
+      expect(created_at).not.toEqual(now1);
+      expect(updated_at).not.toEqual(now2);
+      expect(spyER).toBeCalledTimes(1);
+      expect(spyRE).toBeCalledTimes(1);
+      expect(spyCreate).toBeCalledTimes(0);
+      return;
     });
-    expect(created_at).not.toEqual(now1);
-    expect(updated_at).not.toEqual(now2);
-    expect(spyER).toBeCalledTimes(1);
-    expect(spyRE).toBeCalledTimes(1);
-    return;
   });
   it('remove', async () => {
-    await repository.remove({
-      id: 2,
-      username: 'testuser',
-      email: 'test@test.com',
-      role: 'Normal',
-      password: '12345rtg',
-      verified: true,
-      created_at: now1,
-      updated_at: now2,
-    });
-    expect(mockRepo.delete).toBeCalledTimes(1);
-    expect(mockRepo.delete).toBeCalledWith(2);
+    await repository.remove({ id: 'afesaf' });
+    expect(model.remove).toBeCalledTimes(1);
+    expect(model.remove).toBeCalledWith({ id: 'afesaf' });
     return;
   });
 });

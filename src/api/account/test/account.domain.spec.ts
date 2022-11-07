@@ -6,7 +6,7 @@ jest.mock('@CRYPTO/domain');
 const { get, getPublic, checkPermission, setUsername, setPassword } = Account;
 const now = new Date();
 const TestData = get({
-  id: 1,
+  id: 'testid',
   email: 'test@test.com',
   username: 'testuser',
   password: '1234',
@@ -24,7 +24,7 @@ describe('Account Domain Unit Test', () => {
       password: '12345t322',
     },
     {
-      id: 3,
+      id: 'faraea',
       email: 'test@test.com',
       username: 'testuser',
       password: '12345t322',
@@ -47,7 +47,7 @@ describe('Account Domain Unit Test', () => {
       expect(updated_at).toEqual(data.updated_at);
     }
     expect(account).toEqual({
-      id: data.id ?? 0,
+      id: data.id ?? '',
       email: data.email,
       username: data.username,
       password: data.password,

@@ -2,7 +2,7 @@ import { IBaseAggregate } from '@COMMON/interface/base-aggregate.interface';
 import { Crypto } from '@CRYPTO/domain';
 
 export namespace Account {
-  export type Id = number;
+  export type Id = string;
   export type Permission = 'Admin' | 'Seller' | 'Normal';
   export interface Property extends IBaseAggregate<Id> {
     /**
@@ -67,7 +67,7 @@ export const Account: Account = {
   get(agg) {
     const now = new Date();
     const {
-      id = 0,
+      id = '',
       created_at = now,
       updated_at = now,
       email,
@@ -96,9 +96,29 @@ export const Account: Account = {
     return user === permission;
   },
   setUsername(agg, { username }) {
-    return { ...agg, username };
+    const { id, created_at, updated_at, password, role, email, verified } = agg;
+    return {
+      id,
+      created_at,
+      updated_at,
+      password,
+      role,
+      email,
+      verified,
+      username,
+    };
   },
   async setPassword(agg, { password }) {
-    return { ...agg, password: await Crypto.encrypt(password) };
+    const { id, created_at, updated_at, username, role, email, verified } = agg;
+    return {
+      id,
+      created_at,
+      updated_at,
+      role,
+      email,
+      verified,
+      username,
+      password: await Crypto.encrypt(password),
+    };
   },
 };
