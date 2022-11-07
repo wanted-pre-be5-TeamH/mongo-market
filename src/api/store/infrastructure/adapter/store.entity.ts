@@ -1,3 +1,4 @@
+import { BaseEntity } from '@COMMON/base/base-entity.mongoose';
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Store } from '@STORE/domain';
 
@@ -8,9 +9,10 @@ import { Store } from '@STORE/domain';
     updatedAt: 'updated_at',
   },
 })
-export class StoreEntity implements Store.Property {
-  id!: string;
-
+export class StoreEntity
+  extends BaseEntity<Store.Id>
+  implements Store.Property
+{
   @Prop({ required: true })
   name!: string;
 
@@ -24,10 +26,7 @@ export class StoreEntity implements Store.Property {
 
   @Prop({ required: true })
   description!: string;
-
-  created_at!: Date;
-
-  updated_at!: Date;
 }
 
+export const StoreSchemaName = 'stores';
 export const StoreSchema = SchemaFactory.createForClass(StoreEntity);
