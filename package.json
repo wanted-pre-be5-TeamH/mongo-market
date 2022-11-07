@@ -33,21 +33,20 @@
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.1.6",
     "@nestjs/jwt": "^9.0.0",
+    "@nestjs/mongoose": "^9.2.1",
     "@nestjs/passport": "^9.0.0",
     "@nestjs/platform-express": "^9.1.6",
-    "@nestjs/typeorm": "^9.0.1",
     "bcrypt": "^5.1.0",
     "cookie-parser": "^1.4.6",
     "cross-env": "^7.0.3",
     "helmet": "^6.0.0",
     "joi": "^17.7.0",
-    "mysql2": "^2.3.3",
+    "mongoose": "^6.7.1",
     "nestia-helper": "^3.1.8",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
-    "typeorm": "^0.3.10",
     "typescript-json": "^3.3.21"
   },
   "devDependencies": {
@@ -101,7 +100,8 @@
       "@COMMON/(.*)$": "<rootDir>/../src/api/common/$1",
       "@ACCOUNT/(.*)$": "<rootDir>/../src/api/account/$1",
       "@USER/(.*)$": "<rootDir>/../src/api/user/$1",
-      "@CRYPTO/(.*)$": "<rootDir>/../src/api/crypto/$1"
+      "@CRYPTO/(.*)$": "<rootDir>/../src/api/crypto/$1",
+      "@STORE/(.*)$": "<rootDir>/../src/api/store/$1"
     },
     "coveragePathIgnorePatterns": [
       "main.ts",
@@ -113,7 +113,7 @@
       ".decorator.ts",
       ".guard.ts",
       ".strategy.ts",
-      ".typeorm.ts",
+      ".mongoose.ts",
       ".provider.ts",
       ".provider.ts",
       ".interceptor.ts",

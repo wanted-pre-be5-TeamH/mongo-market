@@ -3,19 +3,21 @@ import { IAccountService } from '@ACCOUNT/application/port/account.service.port'
 import {
   AccountEntity,
   AccountErrorMessage,
+  AccountSchemaName,
 } from '@ACCOUNT/infrastructure/adapter/account.entity';
 import { AccountEntityMapper } from '@ACCOUNT/infrastructure/adapter/account.mapper';
 import { AccountRepository } from '@ACCOUNT/infrastructure/adapter/account.repository';
 import { ExceptionMessage } from '@COMMON/provider/message.provider';
 import { Test } from '@nestjs/testing';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { mockRepository } from './repository.mock';
 import { Crypto } from '@CRYPTO/domain';
+import { mockModel } from '@COMMON/provider/model.mock';
+import { Account } from '@ACCOUNT/domain';
+import { getModelToken } from '@nestjs/mongoose';
 jest.mock('@CRYPTO/domain');
 
 describe('Account Service Unit Test', () => {
   let service: IAccountService;
-  const mockRepo = mockRepository<AccountEntity>();
+  const model = mockModel<Account.Id, AccountEntity>();
   const now1 = new Date();
   const now2 = new Date();
 
@@ -24,8 +26,8 @@ describe('Account Service Unit Test', () => {
       providers: [
         AccountEntityMapper,
         {
-          provide: getRepositoryToken(AccountEntity),
-          useValue: mockRepo,
+          provide: getModelToken(AccountSchemaName),
+          useValue: model,
         },
         AccountRepository,
         AccountService,
@@ -44,8 +46,8 @@ describe('Account Service Unit Test', () => {
 
   describe('findOne', () => {
     it('대상이 존재할 때', async () => {
-      mockRepo.findOne.mockResolvedValue({
-        id: 1,
+      model.findOne.mockResolvedValue({
+        id: 'safew',
         username: 'testuser',
         role: 'Normal',
         email: 'test@test.com',
@@ -55,9 +57,9 @@ describe('Account Service Unit Test', () => {
         updated_at: now2,
       });
 
-      const received = await service.findOne({ id: 1 });
+      const received = await service.findOne({ id: 'safew' });
       expect(received).toEqual({
-        id: 1,
+        id: 'safew',
         username: 'testuser',
         role: 'Normal',
         email: 'test@test.com',
@@ -69,8 +71,8 @@ describe('Account Service Unit Test', () => {
       return;
     });
     it('대상이 없을 때', async () => {
-      mockRepo.findOne.mockResolvedValue(null);
-      await expect(() => service.findOne({ id: 1 })).rejects.toThrowError(
+      model.findOne.mockResolvedValue(null);
+      await expect(() => service.findOne({ id: 'saed' })).rejects.toThrowError(
         ExceptionMessage.NotFound,
       );
       return;
@@ -100,8 +102,8 @@ describe('Account Service Unit Test', () => {
   });
 
   it('signInLocal', async () => {
-    mockRepo.findOne.mockResolvedValue({
-      id: 2,
+    model.findOne.mockResolvedValue({
+      id: 'ecaessc',
       username: 'tesfse',
       email: 'bosdf@gmail.com',
       verified: true,
@@ -117,11 +119,11 @@ describe('Account Service Unit Test', () => {
 
     const received = await service.signInLocal({
       password: '123',
-      username: '234',
+      email: 'bosdf@gmail.com',
     });
 
     expect(received).toEqual({
-      id: 2,
+      id: 'ecaessc',
       username: 'tesfse',
       email: 'bosdf@gmail.com',
       verified: true,
@@ -149,16 +151,8 @@ describe('Account Service Unit Test', () => {
   });
 
   describe('checkDuplicate', () => {
-    it('사용할 수 없는 이름인 경우', async () => {
-      mockRepo.findOne.mockResolvedValue({ id: 2, username: 'test' });
-      await expect(() =>
-        service.checkDuplicate({ username: 'test' }),
-      ).rejects.toThrowError(AccountErrorMessage.username_unique);
-      return;
-    });
-
     it('사용할 수 없는 이메일인 경우', async () => {
-      mockRepo.findOne.mockResolvedValue({ id: 2, email: 'test' });
+      model.findOne.mockResolvedValue({ id: 2, email: 'test' });
       await expect(() =>
         service.checkDuplicate({ email: 'test' }),
       ).rejects.toThrowError(AccountErrorMessage.email_unique);
@@ -166,8 +160,7 @@ describe('Account Service Unit Test', () => {
     });
 
     it('사용가능한 이메일/이름인 경우', async () => {
-      mockRepo.findOne.mockResolvedValue(null);
-      await service.checkDuplicate({ username: '' });
+      model.findOne.mockResolvedValue(null);
       await service.checkDuplicate({ email: '' });
       return;
     });

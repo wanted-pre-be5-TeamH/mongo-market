@@ -6,11 +6,11 @@ jest.mock('@CRYPTO/domain');
 const { get, getPublic, checkPermission, setUsername, setPassword } = Account;
 const now = new Date();
 const TestData = get({
-  id: 1,
+  id: 'testid',
   email: 'test@test.com',
   username: 'testuser',
   password: '1234',
-  role: 'Manager',
+  role: 'Seller',
 });
 
 describe('Account Domain Unit Test', () => {
@@ -24,7 +24,7 @@ describe('Account Domain Unit Test', () => {
       password: '12345t322',
     },
     {
-      id: 3,
+      id: 'faraea',
       email: 'test@test.com',
       username: 'testuser',
       password: '12345t322',
@@ -47,7 +47,7 @@ describe('Account Domain Unit Test', () => {
       expect(updated_at).toEqual(data.updated_at);
     }
     expect(account).toEqual({
-      id: data.id ?? 0,
+      id: data.id ?? '',
       email: data.email,
       username: data.username,
       password: data.password,
@@ -69,7 +69,7 @@ describe('Account Domain Unit Test', () => {
 
   it.each<CheckPermission>([
     { user: 'Admin', permission: 'Admin' },
-    { user: 'Manager', permission: 'Manager' },
+    { user: 'Seller', permission: 'Seller' },
     { user: 'Normal', permission: 'Normal' },
   ])('checkPermission - true', (data) => {
     const result = checkPermission(data);
@@ -78,11 +78,11 @@ describe('Account Domain Unit Test', () => {
   });
   it.each<CheckPermission>([
     { user: 'Admin', permission: 'Normal' },
-    { user: 'Admin', permission: 'Manager' },
+    { user: 'Admin', permission: 'Seller' },
     { user: 'Normal', permission: 'Admin' },
-    { user: 'Normal', permission: 'Manager' },
-    { user: 'Manager', permission: 'Admin' },
-    { user: 'Manager', permission: 'Normal' },
+    { user: 'Normal', permission: 'Seller' },
+    { user: 'Seller', permission: 'Admin' },
+    { user: 'Seller', permission: 'Normal' },
   ])('checkPermission - false', (data) => {
     const result = checkPermission(data);
     expect(result).toBe(false);

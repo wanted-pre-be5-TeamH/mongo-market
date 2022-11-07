@@ -7,14 +7,10 @@ const validationSchema = Joi.object<any, false, IEnv>({
     .default('development'),
   PORT: Joi.string().default('4000'),
 
-  DB_HOST: Joi.string().required(),
-  DB_PORT: Joi.string().required(),
-  DB_USERNAME: Joi.string().required(),
-  DB_PASSWORD: Joi.string().required(),
-  DB_DATABASE: Joi.string().required(),
-
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRESIN: Joi.string().required(),
+
+  MONGO_HOST: Joi.string().required(),
 });
 
 export const ConfigModule = OriginalConfigModule.forRoot({

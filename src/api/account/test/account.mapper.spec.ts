@@ -9,7 +9,7 @@ describe('AccountEntityMapper Unit Test', () => {
 
   it('Entity To Aggregate', () => {
     const entity = new AccountEntity();
-    entity.id = 1;
+    entity.id = 'setafew';
     entity.created_at = now1;
     entity.updated_at = now2;
     entity.username = 'testuser';
@@ -19,7 +19,7 @@ describe('AccountEntityMapper Unit Test', () => {
     entity.email = 'test@test.com';
     const account = mapper.toAggregate(entity);
     expect(account).toEqual({
-      id: 1,
+      id: 'setafew',
       created_at: now1,
       updated_at: now2,
       username: 'testuser',
@@ -33,17 +33,17 @@ describe('AccountEntityMapper Unit Test', () => {
 
   it.each<Account.Property>([
     {
-      id: 0,
+      id: 'seca',
       username: 'testname1',
       email: 'test1@test.com',
       password: '12345',
-      role: 'Manager',
+      role: 'Seller',
       verified: true,
       created_at: now1,
       updated_at: now2,
     },
     {
-      id: 3,
+      id: 'asfrvd',
       username: 'testname2',
       email: 'test2@test.com',
       password: '54321',
@@ -56,7 +56,7 @@ describe('AccountEntityMapper Unit Test', () => {
     const { ...entity } = mapper.toRootEntity(data);
 
     expect(entity).toEqual({
-      id: data.id === 0 ? undefined : data.id,
+      id: data.id,
       email: data.email,
       username: data.username,
       password: data.password,

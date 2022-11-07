@@ -10,7 +10,7 @@
 
 </div>
 
-## 요구사항 분석
+## 🚩 요구사항 분석
 
 - 회원가입/로그인 기능을 제공한다.
 - 판매자 신청, 생성하고자 하는 가게 정보 포함한다.
@@ -22,21 +22,41 @@
   - 최신순 / 주문 마감일 순으로 정렬
   - 상품 id 기준 상세 조회
 
-## 설계도
+## 🚩 설계도
 
-- 회원:user
-  - 사용자 권한은 계층형이 구조 x
-- 가게: store
-  - 일반 사용자: Normal
+<details>
+<summary>가게(store)</summary>
+
+- 판매자는 입점신청할 수 없음
 
 ![store](https://user-images.githubusercontent.com/68629004/200233945-973416a6-6067-49e2-abb6-1f9fff50e259.png)
 
-- 상품: product
+</details>
+<details>
+<summary>상품(product)</summary>
 
 ![product](https://user-images.githubusercontent.com/68629004/200234561-9eed0803-bd3f-46c9-8442-45c7d28b55c7.png)
+
+</details>
 
 ## API 문서
 
 - [View in the `Swagger Editor`](https://editor.swagger.io/?url=https://raw.githubusercontent.com/wanted-pre-be5-TeamH/mongo-market/main/doc/swagger.json)
 
-## 진행상황
+## 📌 진행상황
+
+<details>
+<summary>회원</summary>
+
+- [x] 회원가입/탈퇴
+- [x] 로그인/로그아웃
+- [x] 내정보 조회
+
+</details>
+<details>
+<summary>가게</summary>
+
+- [ ] 가게 입점
+- [ ] 내 가게 조회
+
+</details>

@@ -19,18 +19,23 @@ export class AccountController {
   @HttpCode(202)
   @Post('sign-in')
   async signIn(
-    @helper.TypedBody() body: IAccountUsecase.SignIn,
+    @helper.TypedBody() { email, password }: IAccountUsecase.SignIn,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const [name, token, config] = await this.accountUsecase.signIn(body);
+    const [name, token, config] = await this.accountUsecase.signIn({
+      email,
+      password,
+    });
     res.cookie(name, token, config);
     return { status: 200, access_token: token };
   }
 
   @Public()
   @Post('sign-up')
-  signUp(@helper.TypedBody() body: IAccountUsecase.SignUp) {
-    return this.accountUsecase.signUp(body);
+  signUp(
+    @helper.TypedBody() { email, username, password }: IAccountUsecase.SignUp,
+  ) {
+    return this.accountUsecase.signUp({ email, username, password });
   }
 
   @Get('sign-out')
@@ -42,8 +47,8 @@ export class AccountController {
   @Post('withdraw')
   remove(
     @AccountPublic() account: Account.Public,
-    @helper.TypedBody() body: IAccountUsecase.SignIn,
+    @helper.TypedBody() { email, password }: IAccountUsecase.SignIn,
   ) {
-    return this.accountUsecase.remove(account, body);
+    return this.accountUsecase.remove(account, { email, password });
   }
 }

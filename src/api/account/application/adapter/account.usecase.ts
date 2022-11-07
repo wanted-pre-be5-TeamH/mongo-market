@@ -21,10 +21,11 @@ export class AccountUsecase implements IAccountUsecase {
     private readonly jwtSerivce: JwtService,
   ) {}
 
-  async signIn(
-    dto: IAccountUsecase.SignIn,
-  ): Promise<IAccountUsecase.SignInResponse> {
-    const { id } = await this.accountService.signInLocal(dto);
+  async signIn({
+    email,
+    password,
+  }: IAccountUsecase.SignIn): Promise<IAccountUsecase.SignInResponse> {
+    const { id } = await this.accountService.signInLocal({ email, password });
     const token = this.jwtSerivce.sign({ id });
     return [Cookie.name, token, Cookie.option];
   }
@@ -34,10 +35,7 @@ export class AccountUsecase implements IAccountUsecase {
     username,
     password,
   }: IAccountUsecase.SignUp): Promise<Account.Public> {
-    await Promise.all([
-      this.accountService.checkDuplicate({ username }),
-      this.accountService.checkDuplicate({ email }),
-    ]);
+    await this.accountService.checkDuplicate({ email });
     const hashed = await Crypto.encrypt(password);
     return Account.getPublic(
       await this.accountRepository.save(
@@ -48,15 +46,13 @@ export class AccountUsecase implements IAccountUsecase {
 
   async remove(
     where: Account.Public,
-    validate: IAccountUsecase.SignIn,
+    { email, password }: IAccountUsecase.SignIn,
   ): Promise<IAccountUsecase.RemoveResponse> {
-    if ('username' in validate && validate.username != where.username) {
-      throwHttpException('403', ExceptionMessage.FBD);
-    } else if ('email' in validate && validate.email != where.email) {
+    if (email != where.email) {
       throwHttpException('403', ExceptionMessage.FBD);
     }
-    const account = await this.accountService.signInLocal(validate);
-    await this.accountRepository.remove(account);
+    const { id } = await this.accountService.signInLocal({ email, password });
+    await this.accountRepository.remove({ id });
     return where;
   }
 }
