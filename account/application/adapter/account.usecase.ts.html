@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/28</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>26/26</span>
+                <span class='fraction'>24/24</span>
             </div>
         
             
@@ -121,11 +121,7 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -151,6 +147,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -161,24 +168,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,10 +202,11 @@ export class AccountUsecase implements IAccountUsecase {
     private readonly jwtSerivce: JwtService,
   ) {}
 &nbsp;
-  async signIn(
-    dto: IAccountUsecase.SignIn,
-  ): Promise&lt;IAccountUsecase.SignInResponse&gt; {
-    const { id } = await this.accountService.signInLocal(dto);
+  async signIn({
+    email,
+    password,
+  }: IAccountUsecase.SignIn): Promise&lt;IAccountUsecase.SignInResponse&gt; {
+    const { id } = await this.accountService.signInLocal({ email, password });
     const token = this.jwtSerivce.sign({ id });
     return [Cookie.name, token, Cookie.option];
   }
@@ -223,10 +216,7 @@ export class AccountUsecase implements IAccountUsecase {
     username,
     password,
   }: IAccountUsecase.SignUp): Promise&lt;Account.Public&gt; {
-    await Promise.all([
-      this.accountService.checkDuplicate({ username }),
-      this.accountService.checkDuplicate({ email }),
-    ]);
+    await this.accountService.checkDuplicate({ email });
     const hashed = await Crypto.encrypt(password);
     return Account.getPublic(
       await this.accountRepository.save(
@@ -237,15 +227,13 @@ export class AccountUsecase implements IAccountUsecase {
 &nbsp;
   async remove(
     where: Account.Public,
-    validate: IAccountUsecase.SignIn,
+    { email, password }: IAccountUsecase.SignIn,
   ): Promise&lt;IAccountUsecase.RemoveResponse&gt; {
-    if ('username' in validate &amp;&amp; validate.username != where.username) {
-      throwHttpException('403', ExceptionMessage.FBD);
-    } else if ('email' in validate &amp;&amp; validate.email != where.email) {
+    if (email != where.email) {
       throwHttpException('403', ExceptionMessage.FBD);
     }
-    const account = await this.accountService.signInLocal(validate);
-    await this.accountRepository.remove(account);
+    const { id } = await this.accountService.signInLocal({ email, password });
+    await this.accountRepository.remove({ id });
     return where;
   }
 }
@@ -256,7 +244,7 @@ export class AccountUsecase implements IAccountUsecase {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-11-07T05:47:28.813Z
+                at 2022-11-07T17:24:02.867Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

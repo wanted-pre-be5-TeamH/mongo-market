@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for user/infrastructure/adapter/user.mapper.ts</title>
+    <title>Code coverage report for store/infrastructure/adapter/store.mapper.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,20 +19,20 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">user/infrastructure/adapter</a> user.mapper.ts</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">store/infrastructure/adapter</a> store.mapper.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/16</span>
+                <span class='fraction'>0/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/5</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -87,21 +87,7 @@
 <a name='L22'></a><a href='#L22'>22</a>
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L25'></a><a href='#L25'>25</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -116,52 +102,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js"><span class="cstat-no" title="statement not covered" >import {</span>
-  account_aggregate_to_entity,
-  account_entity_to_aggregate,
-} from '@ACCOUNT/infrastructure/adapter/account.mapper';
-import { IEntityMapper } from '@COMMON/interface/mapper.interface';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IEntityMapper } from '@COMMON/interface/mapper.interface';
 <span class="cstat-no" title="statement not covered" >import { Injectable } from '@nestjs/common';</span>
-<span class="cstat-no" title="statement not covered" >import { User } from '@USER/domain';</span>
-<span class="cstat-no" title="statement not covered" >import { UserEntity } from './user.entity';</span>
+<span class="cstat-no" title="statement not covered" >import { Store } from '@STORE/domain';</span>
+<span class="cstat-no" title="statement not covered" >import { StoreEntity } from './store.entity';</span>
 &nbsp;
 @Injectable()
-export <span class="cstat-no" title="statement not covered" >class <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >UserEntityMapper</span></span></span>
-  implements IEntityMapper&lt;User.Property, UserEntity&gt;
+export <span class="cstat-no" title="statement not covered" >class <span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" >StoreEntityMapper</span></span></span>
+  implements IEntityMapper&lt;Store.Property, StoreEntity&gt;
 {
-<span class="fstat-no" title="function not covered" >  toAggregate(</span>entity: UserEntity): User.Property {
-    const { id, created_at, updated_at, bio, account } = <span class="cstat-no" title="statement not covered" >entity;</span>
-<span class="cstat-no" title="statement not covered" >    return User.get({</span>
-      id,
-      created_at,
-      updated_at,
-      profile: { bio },
-      account: account_entity_to_aggregate(account),
-    });
+<span class="fstat-no" title="function not covered" >  toAggregate(</span>entity: StoreEntity): Store.Property {
+    const { id, created_at, updated_at, name, seller, description } = <span class="cstat-no" title="statement not covered" >entity;</span>
+<span class="cstat-no" title="statement not covered" >    return Store.get({ id, created_at, updated_at, name, seller, description });</span>
   }
-<span class="fstat-no" title="function not covered" >  toRootEntity(</span>aggregate: User.Property): UserEntity {
-    const { id, profile, account } = <span class="cstat-no" title="statement not covered" >aggregate;</span>
-    const entity = <span class="cstat-no" title="statement not covered" >new UserEntity();</span>
-<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (id != 0) {</span>
-<span class="cstat-no" title="statement not covered" >      entity.id = id;</span>
-    }
-<span class="cstat-no" title="statement not covered" >    entity.bio = profile.bio ?? '';</span>
-<span class="cstat-no" title="statement not covered" >    entity.account = account_aggregate_to_entity(account);</span>
+&nbsp;
+<span class="fstat-no" title="function not covered" >  toRootEntity(</span>aggregate: Store.Property): StoreEntity {
+    const { id, name, description, seller } = <span class="cstat-no" title="statement not covered" >aggregate;</span>
+    const entity = <span class="cstat-no" title="statement not covered" >new StoreEntity();</span>
+<span class="cstat-no" title="statement not covered" >    entity.id = id;</span>
+<span class="cstat-no" title="statement not covered" >    entity.name = name;</span>
+<span class="cstat-no" title="statement not covered" >    entity.description = description;</span>
+<span class="cstat-no" title="statement not covered" >    entity.seller = { id: seller.id, username: seller.username };</span>
 <span class="cstat-no" title="statement not covered" >    return entity;</span>
   }
 }
@@ -172,7 +142,7 @@ export <span class="cstat-no" title="statement not covered" >class <span class="
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2022-11-07T05:47:28.813Z
+                at 2022-11-07T17:24:02.867Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
