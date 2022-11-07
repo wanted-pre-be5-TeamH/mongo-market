@@ -69,10 +69,7 @@ describe('Account Domain Unit Test', () => {
 
   it.each<CheckPermission>([
     { user: 'Admin', permission: 'Admin' },
-    { user: 'Admin', permission: 'Normal' },
-    { user: 'Admin', permission: 'Manager' },
     { user: 'Manager', permission: 'Manager' },
-    { user: 'Manager', permission: 'Normal' },
     { user: 'Normal', permission: 'Normal' },
   ])('checkPermission - true', (data) => {
     const result = checkPermission(data);
@@ -80,9 +77,12 @@ describe('Account Domain Unit Test', () => {
     return;
   });
   it.each<CheckPermission>([
+    { user: 'Admin', permission: 'Normal' },
+    { user: 'Admin', permission: 'Manager' },
     { user: 'Normal', permission: 'Admin' },
     { user: 'Normal', permission: 'Manager' },
     { user: 'Manager', permission: 'Admin' },
+    { user: 'Manager', permission: 'Normal' },
   ])('checkPermission - false', (data) => {
     const result = checkPermission(data);
     expect(result).toBe(false);

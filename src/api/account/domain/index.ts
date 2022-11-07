@@ -63,12 +63,6 @@ export interface Account {
   }) => boolean;
 }
 
-const permissionLevel: { [key in Account.Permission]: number } = {
-  Admin: 0,
-  Manager: 1,
-  Normal: 2,
-};
-
 export const Account: Account = {
   get(agg) {
     const now = new Date();
@@ -99,9 +93,7 @@ export const Account: Account = {
   },
 
   checkPermission({ user, permission }) {
-    const ulevel = permissionLevel[user];
-    const plevel = permissionLevel[permission];
-    return ulevel <= plevel;
+    return user === permission;
   },
   setUsername(agg, { username }) {
     return { ...agg, username };
