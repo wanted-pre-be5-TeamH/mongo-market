@@ -1,5 +1,5 @@
 {
-  "name": "nestddd",
+  "name": "mongo-market",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -48,7 +48,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.5.7",
     "typeorm": "^0.3.10",
-    "typescript-json": "^3.3.20"
+    "typescript-json": "^3.3.21"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.1.5",
