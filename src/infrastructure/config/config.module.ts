@@ -15,6 +15,8 @@ const validationSchema = Joi.object<any, false, IEnv>({
 
   JWT_SECRET: Joi.string().required(),
   JWT_EXPIRESIN: Joi.string().required(),
+
+  MONGO_HOST: Joi.string().required(),
 });
 
 export const ConfigModule = OriginalConfigModule.forRoot({

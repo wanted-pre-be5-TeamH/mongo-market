@@ -10,6 +10,8 @@ type IEnv = {
 
   JWT_SECRET: string;
   JWT_EXPIRESIN: string;
+
+  MONGO_HOST: string;
 };
 
 declare namespace NodeJS {

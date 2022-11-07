@@ -32,7 +32,8 @@
       "@COMMON/*":["src/api/common/*"],
       "@ACCOUNT/*":["src/api/account/*"],
       "@USER/*":["src/api/user/*"],
-      "@CRYPTO/*":["src/api/crypto/*"]
+      "@CRYPTO/*":["src/api/crypto/*"],
+      "@STORE/*":["src/api/store/*"]
     },
     
   },

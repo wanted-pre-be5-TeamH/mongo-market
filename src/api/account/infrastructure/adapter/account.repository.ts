@@ -2,7 +2,7 @@ import { Account } from '@ACCOUNT/domain';
 import { IEntityMapper } from '@COMMON/interface/mapper.interface';
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 import { IAccountRepository } from '../port/account.repository.port';
 import { AccountEntity } from './account.entity';
 import { AccountEntityMapper } from './account.mapper';
@@ -28,8 +28,16 @@ export class AccountRepository implements IAccountRepository {
   }
 
   async findOne(
-    where: IAccountRepository.FindOne,
+    dto: IAccountRepository.FindOne,
   ): Promise<Account.Property | null> {
+    const where: FindOptionsWhere<AccountEntity> = {};
+    if ('id' in dto) {
+      where.id = dto.id;
+    } else if ('email' in dto) {
+      where.email = dto.email;
+    } else {
+      where.username = dto.username;
+    }
     const entity = await this.repository.findOne({ where });
     return entity == null ? null : this.mapper.toAggregate(entity);
   }

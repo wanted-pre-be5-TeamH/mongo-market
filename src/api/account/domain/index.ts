@@ -3,7 +3,7 @@ import { Crypto } from '@CRYPTO/domain';
 
 export namespace Account {
   export type Id = number;
-  export type Permission = 'Admin' | 'Manager' | 'Normal';
+  export type Permission = 'Admin' | 'Seller' | 'Normal';
   export interface Property extends IBaseAggregate<Id> {
     /**
      * 이벤트 및 개인 확인용 이메일

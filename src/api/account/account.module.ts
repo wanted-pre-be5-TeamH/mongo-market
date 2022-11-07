@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
@@ -14,6 +14,7 @@ import { JwtAuthGuard } from './provider/guard/jwt.guard';
 import { RoleGuard } from './provider/guard/role.guard';
 import { JwtStrategy } from './provider/strategy/jwt.strategy';
 
+@Global()
 @Module({
   imports: [
     TypeOrmModule.forFeature([AccountEntity]),

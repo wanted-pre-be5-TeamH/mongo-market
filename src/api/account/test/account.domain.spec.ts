@@ -10,7 +10,7 @@ const TestData = get({
   email: 'test@test.com',
   username: 'testuser',
   password: '1234',
-  role: 'Manager',
+  role: 'Seller',
 });
 
 describe('Account Domain Unit Test', () => {
@@ -69,7 +69,7 @@ describe('Account Domain Unit Test', () => {
 
   it.each<CheckPermission>([
     { user: 'Admin', permission: 'Admin' },
-    { user: 'Manager', permission: 'Manager' },
+    { user: 'Seller', permission: 'Seller' },
     { user: 'Normal', permission: 'Normal' },
   ])('checkPermission - true', (data) => {
     const result = checkPermission(data);
@@ -78,11 +78,11 @@ describe('Account Domain Unit Test', () => {
   });
   it.each<CheckPermission>([
     { user: 'Admin', permission: 'Normal' },
-    { user: 'Admin', permission: 'Manager' },
+    { user: 'Admin', permission: 'Seller' },
     { user: 'Normal', permission: 'Admin' },
-    { user: 'Normal', permission: 'Manager' },
-    { user: 'Manager', permission: 'Admin' },
-    { user: 'Manager', permission: 'Normal' },
+    { user: 'Normal', permission: 'Seller' },
+    { user: 'Seller', permission: 'Admin' },
+    { user: 'Seller', permission: 'Normal' },
   ])('checkPermission - false', (data) => {
     const result = checkPermission(data);
     expect(result).toBe(false);

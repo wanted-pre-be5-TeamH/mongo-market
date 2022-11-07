@@ -1,4 +1,3 @@
-import { AccountModule } from '@ACCOUNT/account.module';
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './application/adapter/user.service';
@@ -9,7 +8,7 @@ import { UserRepository } from './infrastructure/adapter/user.repository';
 import { UserController } from './presentation/web/user.controller';
 
 @Module({
-  imports: [AccountModule, TypeOrmModule.forFeature([UserEntity])],
+  imports: [TypeOrmModule.forFeature([UserEntity])],
   providers: [UserEntityMapper, UserRepository, UserService, UserUsecase],
   controllers: [UserController],
 })
