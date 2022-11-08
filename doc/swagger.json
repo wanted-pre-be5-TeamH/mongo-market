@@ -11,6 +11,25 @@
     "title": "Mongo Market"
   },
   "paths": {
+    "/accounts/me": {
+      "get": {
+        "tags": ["accounts"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      }
+    },
     "/accounts/sign-in": {
       "post": {
         "tags": ["accounts"],
@@ -20,14 +39,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Password_and_Pick_lt_Property_comma_email_gt_"
-                  },
-                  {
-                    "$ref": "#/components/schemas/Password_and_Pick_lt_Property_comma_username_gt_"
-                  }
-                ]
+                "$ref": "#/components/schemas/IAccountUsecase.SignIn"
               }
             }
           },
@@ -106,14 +118,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "oneOf": [
-                  {
-                    "$ref": "#/components/schemas/Password_and_Pick_lt_Property_comma_email_gt_"
-                  },
-                  {
-                    "$ref": "#/components/schemas/Password_and_Pick_lt_Property_comma_username_gt_"
-                  }
-                ]
+                "$ref": "#/components/schemas/IAccountUsecase.SignIn"
               }
             }
           },
@@ -134,91 +139,46 @@
         "description": ""
       }
     },
-    "/users/me": {
+    "/products": {
       "get": {
-        "tags": ["users"],
-        "parameters": [],
-        "responses": {
-          "200": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User.PublicDetail"
-                }
-              }
-            }
-          }
-        },
-        "description": ""
-      },
-      "post": {
-        "tags": ["users"],
-        "parameters": [],
-        "requestBody": {
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/__type.o1"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User.PublicDetail"
-                }
-              }
-            }
-          }
-        },
-        "description": ""
-      },
-      "patch": {
-        "tags": ["users"],
-        "parameters": [],
-        "requestBody": {
-          "description": "",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/__type.o2"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User.PublicDetail"
-                }
-              }
-            }
-          }
-        },
-        "description": ""
-      }
-    },
-    "/users/{user_id}": {
-      "get": {
-        "tags": ["users"],
+        "tags": ["products"],
         "parameters": [
           {
-            "name": "user_id",
-            "in": "path",
+            "name": "store_id",
+            "in": "query",
             "description": "",
             "schema": {
-              "type": "number",
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          },
+          {
+            "name": "category",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "description": "",
+            "schema": {
+              "type": "string",
               "nullable": false
             },
             "required": true
@@ -230,7 +190,208 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/User.Public"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/__type.o2"
+                  },
+                  "nullable": false
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "post": {
+        "tags": ["products"],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/__type.o5"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o3"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      }
+    },
+    "/products/{product_id}": {
+      "get": {
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o3"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "patch": {
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/__type.o6"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o3"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      },
+      "delete": {
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "description": ""
+      }
+    },
+    "/stores/mine": {
+      "get": {
+        "tags": ["stores"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o7"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      }
+    },
+    "/stores/{store_id}": {
+      "get": {
+        "tags": ["stores"],
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "description": "",
+            "schema": {
+              "type": "string",
+              "nullable": false
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o7"
+                }
+              }
+            }
+          }
+        },
+        "description": ""
+      }
+    },
+    "/stores": {
+      "post": {
+        "tags": ["stores"],
+        "parameters": [],
+        "requestBody": {
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/__type.o9"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/__type.o7"
                 }
               }
             }
@@ -242,7 +403,106 @@
   },
   "components": {
     "schemas": {
-      "Password_and_Pick_lt_Property_comma_email_gt_": {
+      "__type": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "email": {
+            "type": "string",
+            "nullable": false,
+            "description": "이벤트 및 개인 확인용 이메일",
+            "x-tson-metaTags": [
+              {
+                "kind": "format",
+                "value": "email"
+              }
+            ],
+            "x-tson-jsDocTags": [
+              {
+                "name": "format",
+                "text": [
+                  {
+                    "text": "email",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "format": "email"
+          },
+          "username": {
+            "type": "string",
+            "nullable": false,
+            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
+            "x-tson-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\w{6,15}$"
+              }
+            ],
+            "x-tson-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\w{6,15}$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "pattern": "^\\w{6,15}$"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "Admin",
+              "Seller",
+              "Normal"
+            ],
+            "nullable": false,
+            "description": "사용자 권한"
+          },
+          "store": {
+            "$ref": "#/components/schemas/__type.o1",
+            "description": "판매자의 경우, 입점한 스토어 정보가 생성된다"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "email",
+          "username",
+          "role"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 이름"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "IAccountUsecase.SignIn": {
         "type": "object",
         "properties": {
           "password": {
@@ -296,63 +556,6 @@
         "required": [
           "password",
           "email"
-        ],
-        "x-tson_jsDocTags": []
-      },
-      "Password_and_Pick_lt_Property_comma_username_gt_": {
-        "type": "object",
-        "properties": {
-          "password": {
-            "type": "string",
-            "nullable": false,
-            "description": "비밀번호는 숫자와 문자로이루어진 6이상 20자리 이하의 문자열입니다.",
-            "x-tson-metaTags": [
-              {
-                "kind": "pattern",
-                "value": "^\\w{6,20}$"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "pattern",
-                "text": [
-                  {
-                    "text": "^\\w{6,20}$",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "pattern": "^\\w{6,20}$"
-          },
-          "username": {
-            "type": "string",
-            "nullable": false,
-            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
-            "x-tson-metaTags": [
-              {
-                "kind": "pattern",
-                "value": "^\\w{6,15}$"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "pattern",
-                "text": [
-                  {
-                    "text": "^\\w{6,15}$",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "pattern": "^\\w{6,15}$"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "password",
-          "username"
         ],
         "x-tson_jsDocTags": []
       },
@@ -456,80 +659,6 @@
         ],
         "x-tson_jsDocTags": []
       },
-      "__type": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string",
-            "nullable": false,
-            "description": "이벤트 및 개인 확인용 이메일",
-            "x-tson-metaTags": [
-              {
-                "kind": "format",
-                "value": "email"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "format": "email"
-          },
-          "username": {
-            "type": "string",
-            "nullable": false,
-            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
-            "x-tson-metaTags": [
-              {
-                "kind": "pattern",
-                "value": "^\\w{6,15}$"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "pattern",
-                "text": [
-                  {
-                    "text": "^\\w{6,15}$",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "pattern": "^\\w{6,15}$"
-          },
-          "id": {
-            "type": "number",
-            "nullable": false,
-            "description": "애그리거트의 id"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "Admin",
-              "Manager",
-              "Normal"
-            ],
-            "nullable": false,
-            "description": "사용자 권한"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "email",
-          "username",
-          "id",
-          "role"
-        ],
-        "x-tson_jsDocTags": []
-      },
       "__object.o1": {
         "type": "object",
         "properties": {
@@ -549,168 +678,299 @@
         ],
         "x-tson_jsDocTags": []
       },
-      "User.PublicDetail": {
-        "type": "object",
-        "properties": {
-          "bio": {
-            "type": "string",
-            "nullable": false,
-            "description": "인물 소개 정보"
-          },
-          "email": {
-            "type": "string",
-            "nullable": false,
-            "description": "이벤트 및 개인 확인용 이메일",
-            "x-tson-metaTags": [
-              {
-                "kind": "format",
-                "value": "email"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "format",
-                "text": [
-                  {
-                    "text": "email",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "format": "email"
-          },
-          "username": {
-            "type": "string",
-            "nullable": false,
-            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
-            "x-tson-metaTags": [
-              {
-                "kind": "pattern",
-                "value": "^\\w{6,15}$"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "pattern",
-                "text": [
-                  {
-                    "text": "^\\w{6,15}$",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "pattern": "^\\w{6,15}$"
-          },
-          "id": {
-            "type": "number",
-            "nullable": false,
-            "description": "애그리거트의 id"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "Admin",
-              "Manager",
-              "Normal"
-            ],
-            "nullable": false,
-            "description": "사용자 권한"
-          },
-          "verified": {
-            "type": "boolean",
-            "nullable": false,
-            "description": "이메일 인증 여부"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "email",
-          "username",
-          "id",
-          "role",
-          "verified"
-        ],
-        "x-tson_jsDocTags": []
-      },
-      "User.Public": {
-        "type": "object",
-        "properties": {
-          "bio": {
-            "type": "string",
-            "nullable": false,
-            "description": "인물 소개 정보"
-          },
-          "username": {
-            "type": "string",
-            "nullable": false,
-            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
-            "x-tson-metaTags": [
-              {
-                "kind": "pattern",
-                "value": "^\\w{6,15}$"
-              }
-            ],
-            "x-tson-jsDocTags": [
-              {
-                "name": "pattern",
-                "text": [
-                  {
-                    "text": "^\\w{6,15}$",
-                    "kind": "text"
-                  }
-                ]
-              }
-            ],
-            "pattern": "^\\w{6,15}$"
-          },
-          "id": {
-            "type": "number",
-            "nullable": false,
-            "description": "애그리거트의 id"
-          },
-          "role": {
-            "type": "string",
-            "enum": [
-              "Admin",
-              "Manager",
-              "Normal"
-            ],
-            "nullable": false,
-            "description": "사용자 권한"
-          }
-        },
-        "nullable": false,
-        "required": [
-          "username",
-          "id",
-          "role"
-        ],
-        "x-tson_jsDocTags": []
-      },
-      "__type.o1": {
-        "type": "object",
-        "properties": {
-          "bio": {
-            "type": "string",
-            "nullable": false,
-            "description": "인물 소개 정보"
-          }
-        },
-        "nullable": false,
-        "x-tson_jsDocTags": []
-      },
       "__type.o2": {
         "type": "object",
         "properties": {
-          "bio": {
+          "id": {
             "type": "string",
             "nullable": false,
-            "description": "인물 소개 정보"
+            "description": "애그리거트의 id"
+          },
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품명"
+          },
+          "price": {
+            "type": "number",
+            "nullable": false
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "hobby",
+              "food",
+              "electromics",
+              "clothes"
+            ],
+            "nullable": false
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "Korea",
+              "China",
+              "Japan"
+            ],
+            "nullable": false
           }
         },
         "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "price",
+          "category",
+          "country"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o3": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "store": {
+            "$ref": "#/components/schemas/__type.o4",
+            "description": "소속 가게 정보"
+          },
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품명"
+          },
+          "price": {
+            "type": "number",
+            "nullable": false
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "hobby",
+              "food",
+              "electromics",
+              "clothes"
+            ],
+            "nullable": false
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "Korea",
+              "China",
+              "Japan"
+            ],
+            "nullable": false
+          },
+          "description": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품 설명"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "store",
+          "name",
+          "price",
+          "category",
+          "country",
+          "description"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o4": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 이름"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o5": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품명"
+          },
+          "price": {
+            "type": "number",
+            "nullable": false
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "hobby",
+              "food",
+              "electromics",
+              "clothes"
+            ],
+            "nullable": false
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "Korea",
+              "China",
+              "Japan"
+            ],
+            "nullable": false
+          },
+          "description": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품 설명"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "price",
+          "category",
+          "country",
+          "description"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o6": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품명"
+          },
+          "price": {
+            "type": "number",
+            "nullable": false
+          },
+          "country": {
+            "type": "string",
+            "enum": [
+              "Korea",
+              "China",
+              "Japan"
+            ],
+            "nullable": false
+          },
+          "description": {
+            "type": "string",
+            "nullable": false,
+            "description": "상품 설명"
+          }
+        },
+        "nullable": false,
+        "x-tson_jsDocTags": []
+      },
+      "__type.o7": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 이름"
+          },
+          "description": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 소개"
+          },
+          "seller": {
+            "$ref": "#/components/schemas/__type.o8",
+            "description": "판매자 정보"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "name",
+          "description",
+          "seller"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o8": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": false,
+            "description": "애그리거트의 id"
+          },
+          "username": {
+            "type": "string",
+            "nullable": false,
+            "description": "사용자명은 숫자와 문자로이루어진 6이상 15자리 이하의 문자열입니다.",
+            "x-tson-metaTags": [
+              {
+                "kind": "pattern",
+                "value": "^\\w{6,15}$"
+              }
+            ],
+            "x-tson-jsDocTags": [
+              {
+                "name": "pattern",
+                "text": [
+                  {
+                    "text": "^\\w{6,15}$",
+                    "kind": "text"
+                  }
+                ]
+              }
+            ],
+            "pattern": "^\\w{6,15}$"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "id",
+          "username"
+        ],
+        "x-tson_jsDocTags": []
+      },
+      "__type.o9": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 이름"
+          },
+          "description": {
+            "type": "string",
+            "nullable": false,
+            "description": "스토어 소개"
+          }
+        },
+        "nullable": false,
+        "required": [
+          "name",
+          "description"
+        ],
         "x-tson_jsDocTags": []
       }
     }
