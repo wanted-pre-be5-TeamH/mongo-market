@@ -56,7 +56,15 @@
 <details>
 <summary>가게</summary>
 
-- [ ] 가게 입점
-- [ ] 내 가게 조회
+- [x] 가게 입점
+- [x] 내 가게 조회
+
+</details>
+<details>
+<summary>가게</summary>
+
+- [ ] 상품 CUD
+- [ ] 상품 상세 조회
+- [ ] 상품 검색
 
 </details>
