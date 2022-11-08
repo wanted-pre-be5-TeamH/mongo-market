@@ -165,4 +165,37 @@ describe('Account Service Unit Test', () => {
       return;
     });
   });
+  it('setSeller', async () => {
+    model.findOne.mockResolvedValue({
+      id: 'safew',
+      username: 'testuser',
+      role: 'Normal',
+      email: 'test@test.com',
+      verified: true,
+      password: '12345',
+      created_at: now1,
+      updated_at: now2,
+    });
+    model.findOneAndUpdate.mockResolvedValue({
+      id: 'safew',
+      username: 'testuser',
+      role: 'Seller',
+      email: 'test@test.com',
+      verified: true,
+      password: '12345',
+      created_at: now1,
+      updated_at: now2,
+    });
+    await service.setSeller({ id: 'safew' });
+    expect(model.findOneAndUpdate).toBeCalledWith(
+      { id: 'safew' },
+      {
+        username: 'testuser',
+        role: 'Seller',
+        email: 'test@test.com',
+        verified: true,
+        password: '12345',
+      },
+    );
+  });
 });
