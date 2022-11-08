@@ -33,7 +33,8 @@
       "@ACCOUNT/*":["src/api/account/*"],
       "@USER/*":["src/api/user/*"],
       "@CRYPTO/*":["src/api/crypto/*"],
-      "@STORE/*":["src/api/store/*"]
+      "@STORE/*":["src/api/store/*"],
+      "@PRODUCT/*":["src/api/product/*"]
     },
     
   },
