@@ -101,7 +101,8 @@
       "@ACCOUNT/(.*)$": "<rootDir>/../src/api/account/$1",
       "@USER/(.*)$": "<rootDir>/../src/api/user/$1",
       "@CRYPTO/(.*)$": "<rootDir>/../src/api/crypto/$1",
-      "@STORE/(.*)$": "<rootDir>/../src/api/store/$1"
+      "@STORE/(.*)$": "<rootDir>/../src/api/store/$1",
+      "@PRODUCT/(.*)$": "<rootDir>/../src/api/product/$1"
     },
     "coveragePathIgnorePatterns": [
       "main.ts",
