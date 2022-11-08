@@ -50,6 +50,7 @@ export interface Account {
     agg: Account.Property,
     update: Pick<Account.Property, 'username'>,
   ) => Account.Property;
+  readonly setSeller: (agg: Account.Property) => Account.Property;
   readonly setPassword: (
     agg: Account.Property,
     update: Account.Password,
@@ -91,7 +92,20 @@ export const Account: Account = {
     const { id, username, email, role } = agg;
     return { id, username, email, role };
   },
-
+  setSeller(agg) {
+    const { id, created_at, updated_at, username, email, password, verified } =
+      agg;
+    return {
+      id,
+      created_at,
+      updated_at,
+      username,
+      email,
+      password,
+      verified,
+      role: 'Seller',
+    };
+  },
   checkPermission({ user, permission }) {
     return user === permission;
   },

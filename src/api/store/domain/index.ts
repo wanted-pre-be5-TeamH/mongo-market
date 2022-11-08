@@ -4,12 +4,13 @@ import { IBaseAggregate } from '@COMMON/interface/base-aggregate.interface';
 export namespace Store {
   export type Id = string;
   export type SellerEntity = Pick<Account.Property, 'id' | 'username'>;
-
+  export type SellerId = Account.Id;
   export interface Property extends IBaseAggregate<Id> {
     /**
      * 스토어 이름
      */
     name: string;
+
     /**
      * 판매자 정보
      */

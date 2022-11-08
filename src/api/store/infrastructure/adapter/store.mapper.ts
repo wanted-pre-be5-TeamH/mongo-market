@@ -19,6 +19,7 @@ export class StoreEntityMapper
     entity.name = name;
     entity.description = description;
     entity.seller = { id: seller.id, username: seller.username };
+    entity.seller_id = seller.id;
     return entity;
   }
 }

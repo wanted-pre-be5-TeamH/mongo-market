@@ -7,4 +7,9 @@ export namespace IStoreRepository {
   export type Document = HydratedDocument<StoreEntity>;
 }
 
-export type IStoreRepository = IBaseRepository<Store.Id, Store.Property>;
+export interface IStoreRepository
+  extends IBaseRepository<Store.Id, Store.Property> {
+  findOneBySellerId: (
+    where: Pick<Store.SellerEntity, 'id'>,
+  ) => Promise<Store.Property | null>;
+}

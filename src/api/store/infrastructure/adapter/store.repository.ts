@@ -21,4 +21,10 @@ export class StoreRepository
   ) {
     super(mapper, model);
   }
+  async findOneBySellerId({
+    id: seller_id,
+  }: Pick<Store.SellerEntity, 'id'>): Promise<Store.Property | null> {
+    const document = await this.getModel().findOne({ seller_id });
+    return document == null ? null : Store.get(document);
+  }
 }

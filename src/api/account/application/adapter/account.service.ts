@@ -24,6 +24,12 @@ export class AccountService implements IAccountService {
       : account;
   }
 
+  async setSeller(where: IAccountService.FindOne): Promise<void> {
+    const account = await this.findOne(where);
+    await this.accountRepository.save(Account.setSeller(account));
+    return;
+  }
+
   async checkPassword({
     password,
     hashed,

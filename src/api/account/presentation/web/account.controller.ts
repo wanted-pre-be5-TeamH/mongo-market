@@ -15,6 +15,11 @@ export class AccountController {
     @Inject(AccountUsecase) private readonly accountUsecase: IAccountUsecase,
   ) {}
 
+  @Get('me')
+  async findOne(@AccountPublic() account: Account.Public) {
+    return account;
+  }
+
   @Public()
   @HttpCode(202)
   @Post('sign-in')

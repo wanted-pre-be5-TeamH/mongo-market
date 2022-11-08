@@ -18,11 +18,14 @@ export class StoreEntity
 
   @Prop(
     raw({
-      id: Number,
+      id: String,
       username: String,
     }),
   )
   seller!: Store.SellerEntity;
+
+  @Prop({ required: true })
+  seller_id!: Store.SellerId;
 
   @Prop({ required: true })
   description!: string;

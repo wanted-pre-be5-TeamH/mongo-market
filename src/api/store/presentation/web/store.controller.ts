@@ -5,6 +5,7 @@ import { Public } from '@ACCOUNT/provider/decorator/public.decorator';
 import { AccountPublic } from '@ACCOUNT/provider/decorator/account.decorator';
 import { Account } from '@ACCOUNT/domain';
 import { IStoreUsecase } from '@STORE/application/port/store.usecase.port';
+import { Role } from '@ACCOUNT/provider/decorator/role.decorator';
 
 @Controller('stores')
 export class StoreController {
@@ -12,6 +13,12 @@ export class StoreController {
     @Inject(StoreUsecase)
     private readonly storeUsecase: IStoreUsecase,
   ) {}
+
+  @Role('Seller')
+  @Get('mine')
+  findMine(@AccountPublic() { id }: Account.Public) {
+    return this.storeUsecase.findMine({ id });
+  }
 
   @Public()
   @Get(':store_id')

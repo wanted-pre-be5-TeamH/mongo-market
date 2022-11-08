@@ -1,3 +1,5 @@
+import { AccountService } from '@ACCOUNT/application/adapter/account.service';
+import { IAccountService } from '@ACCOUNT/application/port/account.service.port';
 import { Account } from '@ACCOUNT/domain';
 import { throwHttpException } from '@COMMON/provider/exception.provider';
 import { ExceptionMessage } from '@COMMON/provider/message.provider';
@@ -12,10 +14,19 @@ export class StoreUsecase implements IStoreUsecase {
   constructor(
     @Inject(StoreRepository)
     private readonly storeRepository: IStoreRepository,
+    @Inject(AccountService)
+    private readonly accountService: IAccountService,
   ) {}
 
   async findOne({ id }: IStoreUsecase.FindOne): Promise<Store.Public> {
     const store = await this.storeRepository.findOne({ id });
+    return store == null
+      ? throwHttpException('404', ExceptionMessage.NotFound)
+      : Store.getPublic(store);
+  }
+
+  async findMine({ id }: IStoreUsecase.FindMine): Promise<Store.Public> {
+    const store = await this.storeRepository.findOneBySellerId({ id });
     return store == null
       ? throwHttpException('404', ExceptionMessage.NotFound)
       : Store.getPublic(store);
@@ -28,6 +39,7 @@ export class StoreUsecase implements IStoreUsecase {
     if (role !== 'Normal') {
       throwHttpException('403', ExceptionMessage.FBD);
     }
+    await this.accountService.setSeller({ id });
     return Store.getPublic(
       await this.storeRepository.save(
         Store.get({ name, description, seller: { id, username } }),
