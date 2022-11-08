@@ -61,7 +61,7 @@
 
 </details>
 <details>
-<summary>가게</summary>
+<summary>상품</summary>
 
 - [ ] 상품 CUD
 - [ ] 상품 상세 조회
