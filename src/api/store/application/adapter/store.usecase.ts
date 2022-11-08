@@ -39,11 +39,14 @@ export class StoreUsecase implements IStoreUsecase {
     if (role !== 'Normal') {
       throwHttpException('403', ExceptionMessage.FBD);
     }
-    await this.accountService.setSeller({ id });
-    return Store.getPublic(
-      await this.storeRepository.save(
-        Store.get({ name, description, seller: { id, username } }),
-      ),
+
+    const store = await this.storeRepository.save(
+      Store.get({ name, description, seller: { id, username } }),
     );
+    await this.accountService.update(
+      { id },
+      { role: 'Seller', store: { id: store.id, name: store.name } },
+    );
+    return Store.getPublic(store);
   }
 }

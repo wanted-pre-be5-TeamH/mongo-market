@@ -15,6 +15,10 @@ export namespace IAccountService {
   export type CheckDupliacte = Pick<Account.Property, 'email'>;
 
   export type CheckPassword = Account.Password & { hashed: string };
+
+  export type Update = Partial<
+    Pick<Account.Property, 'username' | 'verified' | 'role' | 'store'>
+  >;
 }
 
 export interface IAccountService {
@@ -24,7 +28,10 @@ export interface IAccountService {
   readonly signInLocal: (
     dto: IAccountService.SignInLocal,
   ) => Promise<Account.Property>;
-  readonly setSeller: (where: IAccountService.FindOne) => Promise<void>;
+  readonly update: (
+    where: IAccountService.FindOne,
+    update: IAccountService.Update,
+  ) => Promise<void>;
   readonly checkPermission: (dto: IAccountService.CheckPermission) => void;
   readonly checkDuplicate: (
     dto: IAccountService.CheckDupliacte,

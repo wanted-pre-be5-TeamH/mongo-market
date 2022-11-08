@@ -29,7 +29,7 @@ describe('Account Usecase Unit Test', () => {
     checkPermission: jest.fn(),
     signInLocal: jest.fn(),
     checkDuplicate: jest.fn(),
-    setSeller: jest.fn(),
+    update: jest.fn(),
   };
 
   beforeAll(async () => {

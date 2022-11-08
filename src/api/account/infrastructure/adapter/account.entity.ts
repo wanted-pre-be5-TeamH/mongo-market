@@ -1,6 +1,6 @@
 import { Account } from '@ACCOUNT/domain';
 import { BaseEntity } from '@COMMON/base/base-entity.mongoose';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export const AccountErrorMessage = {
   email_unique: '이미 사용중인 이메일입니다.',
@@ -32,6 +32,14 @@ export class AccountEntity
 
   @Prop({ default: 'Normal' })
   role!: Account.Permission;
+
+  @Prop(
+    raw({
+      id: String,
+      name: String,
+    }),
+  )
+  store?: Account.StoreEntity;
 }
 
 export const AccountSchemaName = 'accounts';

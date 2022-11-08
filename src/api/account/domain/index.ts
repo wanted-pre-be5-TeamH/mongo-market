@@ -60,7 +60,14 @@ export interface Account {
     agg: Account.Property,
     update: Pick<Account.Property, 'username'>,
   ) => Account.Property;
-  readonly setSeller: (agg: Account.Property) => Account.Property;
+  readonly setRole: (
+    agg: Account.Property,
+    update: Pick<Account.Property, 'role'>,
+  ) => Account.Property;
+  readonly setStore: (
+    agg: Account.Property,
+    store: Account.StoreEntity,
+  ) => Account.Property;
   readonly setPassword: (
     agg: Account.Property,
     update: Account.Password,
@@ -103,29 +110,6 @@ export const Account: Account = {
   getPublic(agg) {
     const { id, username, email, role, store } = agg;
     return { id, username, email, role, store };
-  },
-  setSeller(agg) {
-    const {
-      id,
-      created_at,
-      updated_at,
-      username,
-      email,
-      password,
-      verified,
-      store,
-    } = agg;
-    return {
-      id,
-      created_at,
-      updated_at,
-      username,
-      email,
-      password,
-      verified,
-      role: 'Seller',
-      store,
-    };
   },
   checkPermission({ user, permission }) {
     return user === permission;
@@ -175,5 +159,13 @@ export const Account: Account = {
       password: await Crypto.encrypt(password),
       store,
     };
+  },
+  setRole(agg, { role }) {
+    (agg as any).role = role;
+    return agg;
+  },
+  setStore(agg, { id, name }) {
+    (agg as any).store = { id, name };
+    return agg;
   },
 };

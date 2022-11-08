@@ -17,6 +17,7 @@ export class AccountEntityMapper
       role,
       verified,
       email,
+      store,
     } = entity;
     return Account.get({
       id,
@@ -27,10 +28,11 @@ export class AccountEntityMapper
       verified,
       password,
       role,
+      store,
     });
   }
   toRootEntity(account: Account.Property): AccountEntity {
-    const { id, username, email, password, role, verified } = account;
+    const { id, username, email, password, role, verified, store } = account;
     const entity = new AccountEntity();
     entity.id = id;
     entity.email = email;
@@ -38,6 +40,7 @@ export class AccountEntityMapper
     entity.username = username;
     entity.password = password;
     entity.role = role;
+    entity.store = store;
     return entity;
   }
 }
