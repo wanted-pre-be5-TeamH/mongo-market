@@ -3,14 +3,15 @@ import { Account } from '@ACCOUNT/domain';
 import { Crypto } from '@CRYPTO/domain';
 jest.mock('@CRYPTO/domain');
 
-const { get, getPublic, checkPermission, setUsername, setPassword } = Account;
+const { get, getPublic, checkPermission, setUsername, setPassword, setSeller } =
+  Account;
 const now = new Date();
 const TestData = get({
   id: 'testid',
   email: 'test@test.com',
   username: 'testuser',
   password: '1234',
-  role: 'Seller',
+  role: 'Normal',
 });
 
 describe('Account Domain Unit Test', () => {
@@ -104,6 +105,11 @@ describe('Account Domain Unit Test', () => {
     expect(Crypto.encrypt).toBeCalledWith('changedPassword');
     expect(TestData.password).toBe('1234');
     return;
+  });
+
+  it('setSeller', () => {
+    const data = setSeller(TestData);
+    expect(data.role).toBe('Seller');
   });
 });
 
